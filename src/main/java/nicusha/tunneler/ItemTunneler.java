@@ -102,14 +102,18 @@ public class ItemTunneler extends Item {
                                 }
 
                                 //FLOOR
-                                bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax));
-                                if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA))) {
-                                    level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                if(Config.generateFloor.get()) {
+                                    bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax));
+                                    if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA))) {
+                                        level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                    }
                                 }
                                 //ROOF
-                                bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax));
-                                if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA) || bid.getBlock() instanceof FallingBlock)) {
-                                    level.setBlock(new BlockPos(x + k * deltax + j * deltaz,  y + height, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                if(Config.generateRoof.get()) {
+                                    bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax));
+                                    if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA) || bid.getBlock() instanceof FallingBlock)) {
+                                        level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                    }
                                 }
                             }
 

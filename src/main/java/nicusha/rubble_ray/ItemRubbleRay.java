@@ -1,4 +1,4 @@
-package nicusha.tunneler;
+package nicusha.rubble_ray;
 
 import net.minecraft.core.*;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class ItemTunneler extends Item {
-    TagKey<Block> tunnelable;
-    public ItemTunneler() {
+public class ItemRubbleRay extends Item {
+    TagKey<Block> rubble;
+    public ItemRubbleRay() {
         super(new Properties().tab(CreativeModeTab.TAB_MISC));
-        tunnelable = BlockTags.create(new ResourceLocation(TunnelerMod.MODID, "tunnelable"));
+        rubble = BlockTags.create(new ResourceLocation(RubbleRay.MODID, "rubble"));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ItemTunneler extends Item {
             } else if (deltax != 0 && deltaz != 0) {
                 return InteractionResult.FAIL;
             } else {
-                player.playSound(SoundEvents.GENERIC_EXPLODE);
+                player.playSound(RubbleRay.RAY.get());
                 if (level.isClientSide) {
                     return InteractionResult.SUCCESS;
                 } else {
@@ -86,7 +86,7 @@ public class ItemTunneler extends Item {
                             int j;
                             for(j = -width; j <= width; ++j) {
                                 bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax));
-                                if (bid.is(tunnelable)) {
+                                if (bid.is(rubble)) {
                                     level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState(), 2);
                                 }
 
@@ -127,7 +127,7 @@ public class ItemTunneler extends Item {
 
                     for(k = 0; k < length; k += torches) {
                         bid = level.getBlockState(new BlockPos(x + k * deltax, y - 1, z + k * deltaz));
-                        if ((bid.is(tunnelable))) {
+                        if ((bid.is(rubble))) {
                             level.setBlock(new BlockPos(x + k * deltax, y-1, z + k * deltaz), Blocks.REDSTONE_LAMP.defaultBlockState().setValue(RedstoneLampBlock.LIT, true), 2);
                             level.setBlock(new BlockPos(x + k * deltax, y-2, z + k * deltaz), Blocks.REDSTONE_BLOCK.defaultBlockState(), 2);
                         }

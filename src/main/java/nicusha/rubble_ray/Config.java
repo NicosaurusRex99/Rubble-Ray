@@ -1,4 +1,4 @@
-package nicusha.tunneler;
+package nicusha.rubble_ray;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

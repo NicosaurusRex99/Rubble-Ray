@@ -3,9 +3,10 @@ package nicusha.rubble_ray;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.*;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -24,7 +25,7 @@ public class RubbleRay
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
 
     public static final RegistryObject<Item> RUBBLE_RAY = ITEMS.register("rubble_ray", () -> new ItemRubbleRay());
-    public static final RegistryObject<SoundEvent> RAY = SOUNDS.register("ray", () -> new SoundEvent(new ResourceLocation(MODID, "ray")));
+    public static final RegistryObject<SoundEvent> RAY = SOUNDS.register("ray", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ray")));
 
 
     public RubbleRay()

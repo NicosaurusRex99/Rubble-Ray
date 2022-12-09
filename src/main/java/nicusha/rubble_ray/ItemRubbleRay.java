@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ItemRubbleRay extends Item {
     TagKey<Block> rubble;
     public ItemRubbleRay() {
-        super(new Properties().tab(CreativeModeTab.TAB_MISC));
+        super(new Properties());
         rubble = BlockTags.create(new ResourceLocation(RubbleRay.MODID, "rubble"));
     }
 

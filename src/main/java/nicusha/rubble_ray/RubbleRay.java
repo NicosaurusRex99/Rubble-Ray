@@ -1,6 +1,7 @@
 package nicusha.rubble_ray;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.*;
@@ -30,11 +31,28 @@ public class RubbleRay
 
     public RubbleRay()
     {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ITEMS.register(modEventBus);
-        SOUNDS.register(modEventBus);
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(RubbleRay::registerTab);
+        ITEMS.register(bus);
+        SOUNDS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MODID + "-common.toml");
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+
+    public static final ResourceLocation TAB = new ResourceLocation(RubbleRay.MODID, "rubble_ray");
+
+    private static ItemStack makeIcon() {
+        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(RubbleRay.MODID, "rubble_ray")));
+    }
+
+
+    public static void registerTab(CreativeModeTabEvent.Register event){
+        event.registerCreativeModeTab(TAB, builder -> builder.title(Component.translatable("itemGroup.rubble_ray")).icon(RubbleRay::makeIcon).displayItems((flags, output, isOp) -> {
+            for(RegistryObject<Item> item : RubbleRay.ITEMS.getEntries()){
+                output.accept(item.get());
+            }
+        }));
+
+    }
 }

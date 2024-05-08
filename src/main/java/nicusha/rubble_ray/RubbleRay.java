@@ -1,54 +1,51 @@
 package nicusha.rubble_ray;
 
-import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.*;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import com.mojang.logging.LogUtils;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 @Mod(RubbleRay.MODID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = RubbleRay.MODID)
 public class RubbleRay
 {
     public static final String MODID = "rubble_ray";
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
+    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, MODID);
+    public static final DeferredHolder<Item, Item> RUBBLE_RAY = ITEMS.register("rubble_ray", () -> new ItemRubbleRay());
+    public static final DeferredHolder<SoundEvent, SoundEvent> RAY = SOUNDS.register("ray", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ray")));
 
-    public static final RegistryObject<Item> RUBBLE_RAY = ITEMS.register("rubble_ray", () -> new ItemRubbleRay());
-    public static final RegistryObject<SoundEvent> RAY = SOUNDS.register("ray", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ray")));
-    public static final DeferredRegister<CreativeModeTab> TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
-    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = TAB.register("tab", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.rubble_ray")).icon(() -> new ItemStack(RUBBLE_RAY.get())).build());
-
-    public RubbleRay()
+    public RubbleRay(IEventBus bus, ModContainer container)
     {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::commonSetup);
         ITEMS.register(bus);
         SOUNDS.register(bus);
-        TAB.register(bus);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, MODID + "-common.toml");
-        MinecraftForge.EVENT_BUS.register(this);
+        bus.addListener(this::addCreative);
+        container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    @SubscribeEvent
-    public static void creativeTab(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTab() == CREATIVE_TAB.get()) {
-            for (var regObj : ITEMS.getEntries()) {
-                event.accept(regObj.get());
-            }
-        }
+    private void commonSetup(final FMLCommonSetupEvent event)
+    {
+
     }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event)
+    {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES)
+            event.accept(RUBBLE_RAY.get());
+    }
+
 }

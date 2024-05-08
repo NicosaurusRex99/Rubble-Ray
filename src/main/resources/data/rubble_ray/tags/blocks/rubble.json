@@ -8,8 +8,8 @@
     "minecraft:water",
     "minecraft:lava",
     "#minecraft:sand",
-    "#forge:end_stones",
-    "#forge:stone",
+    "#c:end_stones",
+    "#c:stones",
     "minecraft:dripstone_block",
     "minecraft:calcite",
     "minecraft:smooth_basalt"

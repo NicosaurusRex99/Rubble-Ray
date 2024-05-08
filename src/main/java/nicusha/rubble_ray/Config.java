@@ -1,24 +1,43 @@
 package nicusha.rubble_ray;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class Config {
-    public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final ForgeConfigSpec SPEC;
-    public static ForgeConfigSpec.ConfigValue<Integer> height, width, length, lightGap;
-    public static ForgeConfigSpec.ConfigValue<String> airReplacement;
-    public static ForgeConfigSpec.ConfigValue<Boolean> generateRoof, generateFloor;
+@EventBusSubscriber(modid = RubbleRay.MODID, bus = EventBusSubscriber.Bus.MOD)
+public class Config
+{
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    static {
-        BUILDER.push("Common config for Tunneler");
-        height = BUILDER.comment("Tunnel Height").defineInRange("height", 5, 1, 500);
-        width = BUILDER.comment("Tunnel Radius").defineInRange("width", 5, 1, 500);
-        length = BUILDER.comment("Tunnel Length").defineInRange("length", 64, 1, 500);
-        lightGap = BUILDER.comment("Gap size between lights").defineInRange("lightGap", 5, 1, 500);
-        airReplacement = BUILDER.comment("Block to replace air/water/lava/falling blocks on the roof and floor").define("airReplacement", "minecraft:stone");
-        generateRoof = BUILDER.comment("Fill in air blocks on the roof of the tunnel").define("generateRoof", true);
-        generateFloor = BUILDER.comment("Fill in air blocks on the floor of the tunnel").define("generateFloor", true);
-        BUILDER.pop();
-        SPEC = BUILDER.build();
+    private static final ModConfigSpec.BooleanValue GENERATE_ROOF = BUILDER.comment("Fill in air blocks on the roof of the tunnel").define("generateRoof", true), GENERATE_FLOOR = BUILDER.comment("Fill in air blocks on the floor of the tunnel").define("generateFloor", true);
+    private static final ModConfigSpec.IntValue HEIGHT = BUILDER.comment("Tunnel Height").defineInRange("height", 5, 1, 500), WIDTH = BUILDER.comment("Tunnel Width").defineInRange("width", 5, 1, 500), LENGTH = BUILDER.comment("Tunnel Length").defineInRange("length", 64, 1, 500), LIGHT_GAP = BUILDER.comment("Gap size between lights").defineInRange("lightGap", 5, 1, 500);
+    public static final ModConfigSpec.ConfigValue<String> AIR_REPLACEMENT = BUILDER.comment("Block to replace air/water/lava/falling blocks on the roof and floor").define("airReplacement", "minecraft:stone");
+
+    static final ModConfigSpec SPEC = BUILDER.build();
+
+    public static boolean generateRoof, generateFloor;
+    public static int height, width, length, lightGap;
+    public static String airReplacement;
+
+    private static boolean validateItemName(final Object obj)
+    {
+        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(new ResourceLocation(itemName));
+    }
+
+    @SubscribeEvent
+    static void onLoad(final ModConfigEvent event)
+    {
+        generateRoof = GENERATE_ROOF.get();
+        generateFloor = GENERATE_FLOOR.get();
+        height = HEIGHT.get();
+        width = WIDTH.get();
+        length = LENGTH.get();
+        lightGap = LIGHT_GAP.get();
+        airReplacement = AIR_REPLACEMENT.get();
+
+
     }
 }

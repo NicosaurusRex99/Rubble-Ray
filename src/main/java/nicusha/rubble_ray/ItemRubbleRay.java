@@ -1,8 +1,9 @@
 package nicusha.rubble_ray;
 
 import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.*;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRubbleRay extends Item {
     TagKey<Block> rubble;
@@ -29,11 +29,11 @@ public class ItemRubbleRay extends Item {
         int deltaz = 0;
         int dirx = 0;
         int dirz = 0;
-        int height = Config.height.get();
-        int width = Config.width.get();
-        int length = Config.length.get();
-        int torches = Config.lightGap.get();
-        String replacement = Config.airReplacement.get();
+        int height = Config.height;
+        int width = Config.width;
+        int length = Config.length;
+        int torches = Config.lightGap;
+        String replacement = Config.airReplacement;
         int solid_count = 0;
         if (cposx < 0) {
             dirx = -1;
@@ -73,7 +73,7 @@ public class ItemRubbleRay extends Item {
             } else if (deltax != 0 && deltaz != 0) {
                 return InteractionResult.FAIL;
             } else {
-                player.playSound(RubbleRay.RAY.get());
+                level.playSound(null, player.blockPosition(), RubbleRay.RAY.get(), SoundSource.PLAYERS);
                 if (level.isClientSide) {
                     return InteractionResult.SUCCESS;
                 } else {
@@ -87,7 +87,7 @@ public class ItemRubbleRay extends Item {
                             for(j = -width; j <= width; ++j) {
                                 bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax));
                                 if (bid.is(rubble)) {
-                                    level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState(), 2);
+                                    level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState());
                                 }
 
                                 if (i == height - 1) {
@@ -97,29 +97,29 @@ public class ItemRubbleRay extends Item {
                                     }
 
                                     if (bid.is(Blocks.WATER) || bid.is(Blocks.LAVA)) {
-                                            level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + i + 1, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState(), 2);
+                                            level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + i + 1, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState());
                                     }
                                 }
 
                                 //FLOOR
-                                if(Config.generateFloor.get()) {
+                                if(Config.generateFloor) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA))) {
-                                        level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(new ResourceLocation(replacement)).defaultBlockState());
                                     }
                                 }
                                 //ROOF
-                                if(Config.generateRoof.get()) {
+                                if(Config.generateRoof) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA) || bid.getBlock() instanceof FallingBlock)) {
-                                        level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), ForgeRegistries.BLOCKS.getValue(new ResourceLocation(replacement)).defaultBlockState(), 2);
+                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(new ResourceLocation(replacement)).defaultBlockState());
                                     }
                                 }
                             }
 
                             if (i == height - 1 && solid_count == 0) {
                                 for(j = -width; j <= width; ++j) {
-                                    level.setBlock(new BlockPos(x + k * deltax + j * deltaz, y + i + 1, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState(), 2);
+                                    level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + i + 1, z + k * deltaz + j * deltax), Blocks.AIR.defaultBlockState());
                                 }
                             }
                         }
@@ -128,8 +128,8 @@ public class ItemRubbleRay extends Item {
                     for(k = 0; k < length; k += torches) {
                         bid = level.getBlockState(new BlockPos(x + k * deltax, y - 1, z + k * deltaz));
                         if ((bid.is(rubble))) {
-                            level.setBlock(new BlockPos(x + k * deltax, y-1, z + k * deltaz), Blocks.REDSTONE_LAMP.defaultBlockState().setValue(RedstoneLampBlock.LIT, true), 2);
-                            level.setBlock(new BlockPos(x + k * deltax, y-2, z + k * deltaz), Blocks.REDSTONE_BLOCK.defaultBlockState(), 2);
+                            level.setBlockAndUpdate(new BlockPos(x + k * deltax, y-1, z + k * deltaz), Blocks.REDSTONE_LAMP.defaultBlockState().setValue(RedstoneLampBlock.LIT, true));
+                            level.setBlockAndUpdate(new BlockPos(x + k * deltax, y-2, z + k * deltaz), Blocks.REDSTONE_BLOCK.defaultBlockState());
                         }
                     }
 

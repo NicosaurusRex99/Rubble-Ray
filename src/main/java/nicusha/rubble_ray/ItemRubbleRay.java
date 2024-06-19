@@ -17,7 +17,7 @@ public class ItemRubbleRay extends Item {
     TagKey<Block> rubble;
     public ItemRubbleRay() {
         super(new Properties());
-        rubble = BlockTags.create(new ResourceLocation(RubbleRay.MODID, "rubble"));
+        rubble = BlockTags.create(ResourceLocation.fromNamespaceAndPath(RubbleRay.MODID, "rubble"));
     }
 
     @Override
@@ -105,14 +105,14 @@ public class ItemRubbleRay extends Item {
                                 if(Config.generateFloor) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA))) {
-                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(new ResourceLocation(replacement)).defaultBlockState());
+                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(ResourceLocation.parse(replacement)).defaultBlockState());
                                     }
                                 }
                                 //ROOF
                                 if(Config.generateRoof) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA) || bid.getBlock() instanceof FallingBlock)) {
-                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(new ResourceLocation(replacement)).defaultBlockState());
+                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(ResourceLocation.parse(replacement)).defaultBlockState());
                                     }
                                 }
                             }

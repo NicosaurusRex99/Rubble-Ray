@@ -26,7 +26,7 @@ public class RubbleRay
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, MODID);
     public static final DeferredHolder<Item, Item> RUBBLE_RAY = ITEMS.register("rubble_ray", () -> new ItemRubbleRay());
-    public static final DeferredHolder<SoundEvent, SoundEvent> RAY = SOUNDS.register("ray", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ray")));
+    public static final DeferredHolder<SoundEvent, SoundEvent> RAY = SOUNDS.register("ray", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "ray")));
 
     public RubbleRay(IEventBus bus, ModContainer container)
     {

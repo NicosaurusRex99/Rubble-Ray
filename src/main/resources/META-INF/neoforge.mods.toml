@@ -1,14 +1,14 @@
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="${mod_license}"
+loaderVersion="[4,)"
+license="All Rights Reserved"
 issueTrackerURL="https://github.com/NicosaurusRex99/Rubble-Ray/issues"
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
+modId="rubble_ray"
+version="1.6.2"
+displayName="Rubble Ray"
 updateJSONURL="https://raw.githubusercontent.com/NicosaurusRex99/Nicusha-mod-assets/main/rubble_ray.json"
 displayURL="https://legacy.curseforge.com/minecraft/mc-mods/rubble-ray"
 logoFile="logo.png"
 credits="Thank you to TheyCallMeDanger for allowing me to modernize orespawns Miners Dream item"
-authors="${mod_authors}" #optional
-description='''${mod_description}'''
+authors="Nicusha"
+description=''''''

@@ -6,24 +6,12 @@
     "TTT"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:diamond_pickaxe"
-    },
-    "L": {
-      "item": "minecraft:lever"
-    },
-    "D": {
-      "item": "minecraft:diamond_shovel"
-    },
-    "X": {
-      "item": "minecraft:lightning_rod"
-    },
-    "C": {
-      "item": "minecraft:comparator"
-    },
-    "T": {
-      "item": "minecraft:tnt"
-    }
+    "#": "minecraft:diamond_pickaxe",
+    "L": "minecraft:lever",
+    "D": "minecraft:diamond_shovel",
+    "X": "minecraft:lightning_rod",
+    "C": "minecraft:comparator",
+    "T": "minecraft:tnt"
   },
   "result": {
     "id": "rubble_ray:rubble_ray",

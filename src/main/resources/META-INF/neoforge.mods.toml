@@ -4,7 +4,7 @@ license="All Rights Reserved"
 issueTrackerURL="https://github.com/NicosaurusRex99/Rubble-Ray/issues"
 [[mods]]
 modId="rubble_ray"
-version="1.6.2"
+version="1.6.3"
 displayName="Rubble Ray"
 updateJSONURL="https://raw.githubusercontent.com/NicosaurusRex99/Nicusha-mod-assets/main/rubble_ray.json"
 displayURL="https://legacy.curseforge.com/minecraft/mc-mods/rubble-ray"

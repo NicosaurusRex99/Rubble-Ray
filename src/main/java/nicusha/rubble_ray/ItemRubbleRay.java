@@ -2,6 +2,8 @@ package nicusha.rubble_ray;
 
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.*;
@@ -16,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemRubbleRay extends Item {
     TagKey<Block> rubble;
     public ItemRubbleRay() {
-        super(new Properties());
+        super(new Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(RubbleRay.MODID, "rubble_ray"))));
         rubble = BlockTags.create(ResourceLocation.fromNamespaceAndPath(RubbleRay.MODID, "rubble"));
     }
 
@@ -101,20 +103,49 @@ public class ItemRubbleRay extends Item {
                                     }
                                 }
 
-                                //FLOOR
-                                if(Config.generateFloor) {
+                                // FLOOR
+                                if (Config.generateFloor) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA))) {
-                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(ResourceLocation.parse(replacement)).defaultBlockState());
+                                        level.setBlockAndUpdate(
+                                                new BlockPos(x + k * deltax + j * deltaz, y - 1, z + k * deltaz + j * deltax),
+                                                getBlockStateForHeight(y - 1)
+                                        );
                                     }
                                 }
-                                //ROOF
-                                if(Config.generateRoof) {
+
+                                // ROOF
+                                if (Config.generateRoof) {
                                     bid = level.getBlockState(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax));
                                     if ((bid.is(Blocks.AIR) || bid.is(Blocks.WATER) || bid.is(Blocks.LAVA) || bid.getBlock() instanceof FallingBlock)) {
-                                        level.setBlockAndUpdate(new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax), BuiltInRegistries.BLOCK.get(ResourceLocation.parse(replacement)).defaultBlockState());
+                                        level.setBlockAndUpdate(
+                                                new BlockPos(x + k * deltax + j * deltaz, y + height, z + k * deltaz + j * deltax),
+                                                getBlockStateForHeight(y + height)
+                                        );
                                     }
                                 }
+
+                                // WALLS
+                                if (Config.generateWalls) {
+                                    // Left wall (j == -width)
+                                    if (j == -width) {
+                                        BlockPos leftWallPos = new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax);
+                                        BlockState leftWallBlock = level.getBlockState(leftWallPos);
+                                        if (leftWallBlock.is(Blocks.AIR) || leftWallBlock.is(Blocks.WATER) || leftWallBlock.is(Blocks.LAVA)) {
+                                            level.setBlockAndUpdate(leftWallPos, getBlockStateForHeight(y + i));
+                                        }
+                                    }
+
+                                    // Right wall (j == width)
+                                    if (j == width) {
+                                        BlockPos rightWallPos = new BlockPos(x + k * deltax + j * deltaz, y + i, z + k * deltaz + j * deltax);
+                                        BlockState rightWallBlock = level.getBlockState(rightWallPos);
+                                        if (rightWallBlock.is(Blocks.AIR) || rightWallBlock.is(Blocks.WATER) || rightWallBlock.is(Blocks.LAVA)) {
+                                            level.setBlockAndUpdate(rightWallPos, getBlockStateForHeight(y + i));
+                                        }
+                                    }
+                                }
+
                             }
 
                             if (i == height - 1 && solid_count == 0) {
@@ -141,5 +172,8 @@ public class ItemRubbleRay extends Item {
                 }
             }
         }
+    }
+    BlockState getBlockStateForHeight(int y) {
+        return y <= -8 ? Blocks.DEEPSLATE.defaultBlockState() : Blocks.STONE.defaultBlockState();
     }
 }

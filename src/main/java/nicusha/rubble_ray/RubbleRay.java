@@ -35,6 +35,7 @@ public class RubbleRay
         SOUNDS.register(bus);
         bus.addListener(this::addCreative);
         container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        bus.addListener(Config::onLoad);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

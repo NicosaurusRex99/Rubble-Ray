@@ -24,6 +24,7 @@ public class ItemRubbleRay extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
+        System.out.println("Tunnel size: " + Config.length + "x" + Config.width + "x" + Config.height);
         Player player = context.getPlayer();
         Level level = context.getLevel();
         int cposx = context.getClickedPos().getX(), cposz = context.getClickedPos().getZ();

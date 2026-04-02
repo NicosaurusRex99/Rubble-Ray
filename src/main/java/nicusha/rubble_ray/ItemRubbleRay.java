@@ -3,8 +3,8 @@ package nicusha.rubble_ray;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.*;
 import net.minecraft.world.InteractionResult;
@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemRubbleRay extends Item {
     TagKey<Block> rubble;
     public ItemRubbleRay() {
-        super(new Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(RubbleRay.MODID, "rubble_ray"))));
-        rubble = BlockTags.create(ResourceLocation.fromNamespaceAndPath(RubbleRay.MODID, "rubble"));
+        super(new Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(RubbleRay.MODID, "rubble_ray"))));
+        rubble = BlockTags.create(Identifier.fromNamespaceAndPath(RubbleRay.MODID, "rubble"));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ItemRubbleRay extends Item {
                 return InteractionResult.FAIL;
             } else {
                 level.playSound(null, player.blockPosition(), RubbleRay.RAY.get(), SoundSource.PLAYERS);
-                if (level.isClientSide) {
+                if (level.isClientSide()) {
                     return InteractionResult.SUCCESS;
                 } else {
                     int k;

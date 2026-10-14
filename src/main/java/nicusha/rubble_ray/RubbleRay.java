@@ -34,7 +34,7 @@ public class RubbleRay
         ITEMS.register(bus);
         SOUNDS.register(bus);
         bus.addListener(this::addCreative);
-        container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        container.registerConfig(ModConfig.Type.LOCAL, Config.SPEC);
         bus.addListener(Config::onLoad);
     }
 
